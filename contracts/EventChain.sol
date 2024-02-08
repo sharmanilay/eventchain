@@ -7,7 +7,7 @@ import '@openzeppelin/contracts/utils/Counters.sol';
 import '@openzeppelin/contracts/token/ERC721/ERC721.sol';
 import '@openzeppelin/contracts/security/ReentrancyGuard.sol';
 
-contract MainEvent is Ownable, ReentrancyGuard, ERC721 {
+contract EventChain is Ownable, ReentrancyGuard, ERC721 {
   using Counters for Counters.Counter;
   Counters.Counter private _totalEvents;
   Counters.Counter private _totalTokens;
@@ -144,8 +144,8 @@ contract MainEvent is Ownable, ReentrancyGuard, ERC721 {
     uint256 index;
 
     for (uint256 i = 1; i <= _totalEvents.current(); i++) {
-      if (!events[i].deleted && events[i].owner === msg.sender) {
-        Events[index++] = events[i]
+      if (!events[i].deleted && events[i].owner == msg.sender) {
+        Events[index++] = events[i];
       }
     }
   }
@@ -199,13 +199,13 @@ contract MainEvent is Ownable, ReentrancyGuard, ERC721 {
     uint256 feePct = (revenue * servicePct) / 100;
 
     payTo(events[eventId].owner, revenue - feePct);
-    payTo(ownder(), feePct);
+    payTo(owner(), feePct);
 
     events[eventId].paidOut =true;
     balance -= revenue;
   }
 
-  function mintTickets(unit256 eventId) internal returns (bool) {
+  function mintTickets(uint256 eventId) internal returns (bool) {
     for (uint i = 0; i < tickets[eventId].length; i++) {
       _totalTokens.increment();
       tickets[eventId][i].minted = true;
