@@ -173,8 +173,52 @@ contract MainEvent is Ownable, ReentrancyGuard, ERC721 {
     balance += msg.value;
   }
 
-    function getTickets(uint256 eventId) public view returns (TicketStruct[] memory Tickets) {
+  function getTickets(uint256 eventId) public view returns (TicketStruct[] memory Tickets) {
     return tickets[eventId];
+  }
+
+  function refundTickets(uint256 eventId) internal returns (bool) {
+    for (uint i = 0; i < tickets[eventId].length; i++) {
+      tickets[eventId][i].refunded = true;
+      payTo(tickets[eventId][i].owner, tickets[eventId][i].ticketCost);
+      balance -= tickets[eventId][i].ticketCost;
+    }
+
+    events[eventId].refunded = true;
+    return true;
+  }
+
+  function payout (uint256 eventId) public {
+    require(eventExists[eventId], 'Event not found');
+    require(!events[eventId].paidOut, 'Event already paid out');
+    require(currentTime() > events[eventId].endsAt, 'Event Still ongoing');
+    require(events[eventId].owner == msg.sender || msg.sender == owner(), 'Unauthorized Access');
+    require(mintTickets(eventId), 'Event failed to mint');
+
+    uint256 revenue = events[eventId].ticketCost * events[eventId].seats;
+    uint256 feePct = (revenue * servicePct) / 100;
+
+    payTo(events[eventId].owner, revenue - feePct);
+    payTo(ownder(), feePct);
+
+    events[eventId].paidOut =true;
+    balance -= revenue;
+  }
+
+  function mintTickets(unit256 eventId) internal returns (bool) {
+    for (uint i = 0; i < tickets[eventId].length; i++) {
+      _totalTokens.increment();
+      tickets[eventId][i].minted = true;
+      _mint(tickets[eventId][i].owner, _totalTokens.current());
+    }
+
+    events[eventId].minted = true;
+    return true;
+  }
+
+  function payTo(address to, uint256 amount) internal {
+    (bool success, ) = payable(to).call{value: amount}('');
+    require(success);
   }
 
 
