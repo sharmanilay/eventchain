@@ -167,7 +167,7 @@ const getTickets = async (eventId: number): Promise<TicketStruct[]> => {
   return structuredTicket(tickets)
 }
 
-const structuredEvent = (events: EventStruct[]): EventStruct[] => {
+const structuredEvent = (events: EventStruct[]): EventStruct[] =>
   events
     .map((event) => ({
       id: Number(event.id),
@@ -188,7 +188,6 @@ const structuredEvent = (events: EventStruct[]): EventStruct[] => {
       minted: event.minted,
     }))
     .sort((a, b) => b.timestamp - a.timestamp)
-}
 
 const structuredTicket = (tickets: TicketStruct[]): TicketStruct[] =>
   tickets
