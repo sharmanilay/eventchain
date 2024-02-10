@@ -1,12 +1,17 @@
-import { EventStruct } from '@/utils/type.dt'
+import { EventStruct, RootState } from '@/utils/type.dt'
 import React, { FormEvent, useState } from 'react'
 import { FaTimes } from 'react-icons/fa'
 import { toast } from 'react-toastify'
 import { useAccount } from 'wagmi'
+import { buyTicket } from '@/services/blockchain'
+import { globalActions } from '@/store/globalSlices'
+import { useDispatch, useSelector } from 'react-redux'
 
 const BuyTicket: React.FC<{ event: EventStruct }> = ({ event }) => {
-  const ticketModal = 'scale-0'
+  const { ticketModal } = useSelector((states: RootState) => states.globalStates)
+  const { setTicketModal } = globalActions
   const { address } = useAccount()
+  const dispatch = useDispatch()
   const [tickets, setTickets] = useState<number | string>('')
 
   const handleSubmit = async (e: FormEvent) => {
@@ -15,8 +20,14 @@ const BuyTicket: React.FC<{ event: EventStruct }> = ({ event }) => {
 
     await toast.promise(
       new Promise(async (resolve, reject) => {
-        console.log(event)
-        resolve(event)
+        buyTicket(event, Number(tickets))
+          .then((tx) => {
+            dispatch(setTicketModal('scale-0'))
+            setTickets('')
+            console.log(tx)
+            resolve(tx)
+          })
+          .catch((error) => reject(error))
       }),
       {
         pending: 'Approve transaction...',
@@ -35,9 +46,7 @@ const BuyTicket: React.FC<{ event: EventStruct }> = ({ event }) => {
         <div className="flex flex-col">
           <div className="flex flex-row justify-between items-center">
             <p className="font-semibold">Buy Tickets</p>
-            <button
-              className="border-0 bg-transparent focus:outline-none"
-            >
+            <button className="border-0 bg-transparent focus:outline-none">
               <FaTimes />
             </button>
           </div>
