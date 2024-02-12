@@ -21,14 +21,12 @@ const getEthereumContracts = async () => {
     const provider = new ethers.BrowserProvider(ethereum)
     const signer = await provider.getSigner()
     const contracts = new ethers.Contract(address.eventChainContract, abi.abi, signer)
-
     return contracts
   } else {
     const provider = new ethers.JsonRpcProvider(process.env.NEXT_PUBLIC_RPC_URL)
     const wallet = ethers.Wallet.createRandom()
     const signer = wallet.connect(provider)
     const contracts = new ethers.Contract(address.eventChainContract, abi.abi, signer)
-
     return contracts
   }
 }
@@ -151,8 +149,8 @@ const getEvents = async (): Promise<EventStruct[]> => {
 
 const getMyEvents = async (): Promise<EventStruct[]> => {
   const contracts = await getEthereumContracts()
-  const myEvents = await contracts.getMyEvents()
-  return structuredEvent(myEvents)
+  const events = await contracts.getMyEvents()
+  return structuredEvent(events)
 }
 
 const getEvent = async (eventId: number): Promise<EventStruct> => {

@@ -9,6 +9,7 @@ import { EventStruct } from '@/utils/type.dt'
 import { GrEdit } from 'react-icons/gr'
 import { FiDollarSign } from 'react-icons/fi'
 import { useRouter } from 'next/router'
+import { deleteEvent, payout } from '@/services/blockchain'
 
 const EventActions: React.FC<{ event: EventStruct }> = ({ event }) => {
   const { address } = useAccount()
@@ -22,8 +23,13 @@ const EventActions: React.FC<{ event: EventStruct }> = ({ event }) => {
 
     await toast.promise(
       new Promise(async (resolve, reject) => {
-        console.log(event)
-        resolve(event)
+        deleteEvent(event.id)
+          .then((tx) => {
+            console.log(tx)
+            router.push('/')
+            resolve(tx)
+          })
+          .catch((error) => reject(error))
       }),
       {
         pending: 'Approve transaction...',
@@ -41,8 +47,12 @@ const EventActions: React.FC<{ event: EventStruct }> = ({ event }) => {
 
     await toast.promise(
       new Promise(async (resolve, reject) => {
-        console.log(event)
-        resolve(event)
+        payout(event.id)
+          .then((tx) => {
+            console.log(tx)
+            resolve(tx)
+          })
+          .catch((error) => reject(error))
       }),
       {
         pending: 'Approve transaction...',
@@ -64,7 +74,7 @@ const EventActions: React.FC<{ event: EventStruct }> = ({ event }) => {
       </Menu.Button>
       <Menu.Items
         className="absolute right-0 w-56 origin-top-right
-          divide-y divide-gray-300 rounded-md bg-white shadow-md 
+          divide-y divide-gray-300 rounded-md bg-white shadow-md
           ing-1 ring-gray-300 ring-opacity-5 focus:outline-none"
       >
         {address == event.owner && (

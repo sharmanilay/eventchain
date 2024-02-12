@@ -1,10 +1,9 @@
 {
-  "name": "chartity-dapp",
-  "description": "A Next.js starter that includes all you need to build amazing projects",
+  "name": "event-chain-app",
+  "description": "A web 3 ticketing platform",
   "version": "1.0.0",
   "private": true,
-  "author": "darlington gospel<darlingtongospel@gmail.com>",
-  "license": "MIT",
+  "author": "Nilay Sharma",
   "keywords": [
     "nextjs",
     "starter",

@@ -112,7 +112,7 @@ contract EventChain is Ownable, ReentrancyGuard, ERC721 {
     events[eventId].deleted = true;
   }
 
-  function getEvents () public view returns (EventStruct[] memory Events) {
+  function getEvents() public view returns (EventStruct[] memory Events) {
     uint256 available;
 
     for (uint256 i = 1; i<= _totalEvents.current(); i++) {
@@ -188,7 +188,7 @@ contract EventChain is Ownable, ReentrancyGuard, ERC721 {
     return true;
   }
 
-  function payout (uint256 eventId) public {
+  function payout(uint256 eventId) public {
     require(eventExists[eventId], 'Event not found');
     require(!events[eventId].paidOut, 'Event already paid out');
     require(currentTime() > events[eventId].endsAt, 'Event Still ongoing');

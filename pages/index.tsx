@@ -11,6 +11,7 @@ const Page: NextPage<{ eventsData: EventStruct[] }> = ({ eventsData }) => {
   const [count] = useState<number>(6)
   const [collection, setCollection] = useState<EventStruct[]>([])
 
+  console.log(eventsData)
   useEffect(() => {
     setCollection(eventsData.slice(0, end))
   }, [eventsData, end])

@@ -18,6 +18,7 @@ const Page: NextPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       const events: EventStruct[] = await getMyEvents()
+      console.log(events)
       setEvents(events)
     }
 

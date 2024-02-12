@@ -67,7 +67,7 @@ const wagmiConfig = createConfig({
 })
 
 const demoAppInfo = {
-  appName: 'Dapp Funds dApp',
+  appName: 'Event Chain App',
 }
 
 const getSiweMessageOptions: GetSiweMessageOptions = () => ({

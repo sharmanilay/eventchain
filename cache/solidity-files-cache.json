@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/Users/nilay/Desktop/personal/eventchain/contracts/EventChain.sol": {
-      "lastModificationDate": 1707385095174,
-      "contentHash": "1ed6afd42a83b2a4bb659cecf2d11a45",
+      "lastModificationDate": 1707574961104,
+      "contentHash": "05e06a15e1df47a1c9aca22c1750fcd3",
       "sourceName": "contracts/EventChain.sol",
       "solcConfig": {
         "version": "0.8.17",
